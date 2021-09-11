@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Donasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DonasiController extends Controller
 {
     public function index(){
-        $donasi = Donasi::all();
+        $donasi = Donasi::select(array('donasis.*', DB::raw("DATEDIFF(tgl_selesai, tgl_mulai) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -62,7 +63,7 @@ class DonasiController extends Controller
     }
 
     public function show($id) {
-        $donasi = Donasi::find($id);
+        $donasi = Donasi::where('id', $id)->select(array('donasis.*', DB::raw("DATEDIFF(tgl_selesai, tgl_mulai) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -71,7 +72,7 @@ class DonasiController extends Controller
     }
 
     public function getDonasiByKategori($kategori){
-        $donasi = Donasi::where('kategori', $kategori)->get();
+        $donasi = Donasi::where('kategori', $kategori)->select(array('donasis.*', DB::raw("DATEDIFF(tgl_selesai, tgl_mulai) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -80,7 +81,7 @@ class DonasiController extends Controller
     }
 
     public function getDonasiByTingkatan($tingkatan){
-        $donasi = Donasi::where('tingkatan', $tingkatan)->get();
+        $donasi = Donasi::where('tingkatan', $tingkatan)->select(array('donasis.*', DB::raw("DATEDIFF(tgl_selesai, tgl_mulai) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -92,7 +93,7 @@ class DonasiController extends Controller
         $donasi = Donasi::where('status', 'ongoing')
                         ->limit(5)
                         ->orderBy('tgl_selesai')
-                        ->get();
+                        ->select(array('donasis.*', DB::raw("DATEDIFF(tgl_selesai, tgl_mulai) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
