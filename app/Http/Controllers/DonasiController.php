@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class DonasiController extends Controller
 {
     public function index(){
-        $donasi = Donasi::select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM tgl_mulai)) / 86400) AS sisa_hari")))->get();
+        $donasi = Donasi::select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM CURRENT_DATE)) / 86400) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -63,7 +63,7 @@ class DonasiController extends Controller
     }
 
     public function show($id) {
-        $donasi = Donasi::where('id', $id)->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM tgl_mulai)) / 86400) AS sisa_hari")))->get();
+        $donasi = Donasi::where('id', $id)->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM CURRENT_DATE)) / 86400) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -72,7 +72,7 @@ class DonasiController extends Controller
     }
 
     public function getDonasiByKategori($kategori){
-        $donasi = Donasi::where('kategori', $kategori)->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM tgl_mulai)) / 86400) AS sisa_hari")))->get();
+        $donasi = Donasi::where('kategori', $kategori)->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM CURRENT_DATE)) / 86400) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -81,7 +81,7 @@ class DonasiController extends Controller
     }
 
     public function getDonasiByTingkatan($tingkatan){
-        $donasi = Donasi::where('tingkatan', $tingkatan)->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM tgl_mulai)) / 86400) AS sisa_hari")))->get();
+        $donasi = Donasi::where('tingkatan', $tingkatan)->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM CURRENT_DATE)) / 86400) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
@@ -93,7 +93,7 @@ class DonasiController extends Controller
         $donasi = Donasi::where('status', 'ongoing')
                         ->limit(5)
                         ->orderBy('tgl_selesai')
-                        ->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM tgl_mulai)) / 86400) AS sisa_hari")))->get();
+                        ->select(array('donasis.*', DB::raw("trunc((extract(epoch FROM tgl_selesai) - extract(epoch FROM CURRENT_DATE)) / 86400) AS sisa_hari")))->get();
 
         return response()->json([
             'status' => 'success',
